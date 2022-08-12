@@ -134,6 +134,7 @@ for lat, lon, start_date, end_date in lat_lon_props_id:
 temp_mean_id2 = df_id2_total.temp.mean().round(2)
 print('Respuesta:', temp_mean_id2,'ºC')
 
+
 #############################################################################
 # ¿Cuál es la temperatura promedio de las visitas para los días con lluvia? #
 #                                                                           #
