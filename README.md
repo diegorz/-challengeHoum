@@ -23,7 +23,7 @@ Simple API a la cual se le puede consultar la historia y el pronóstico del clim
 Archivo donde se configura la API Key entregada a una cuenta generada en el portal de Visual Crossing: https://www.visualcrossing.com/account
 
 #### challengeHoum.py:
-Archivo python donde se desarrolla el desafío como tal, respondiendo a las preguntas entregadas. Se utiliza Python3.9 y las librerías json,time,datetime,requests,pandas y sys
+Archivo python donde se desarrolla el desafío como tal, respondiendo a las preguntas entregadas. Se utiliza Python3.9 y las librerías json, time, datetime, requests, pandas, sys, io.
   
 ### Ejemplo ejecución: 
 `python3 challengeHoum.py`
