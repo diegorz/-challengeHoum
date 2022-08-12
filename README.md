@@ -21,7 +21,7 @@ API a la cual se le puede consultar el clima de un lugar en un rango de fechas. 
 Archivo donde se configura la API Key entregada a una cuenta generada en el portal de Visual Crossing: https://www.visualcrossing.com/account
 
 - *challengeHoum.py*:
-Archivo python donde se desarrolla el desafío como tal, respondiendo a las preguntas entregadas.Las librerías a utilizar son:
+Archivo python donde se desarrolla el desafío como tal, respondiendo a las preguntas entregadas. Las librerías utilizadas son:
   - json
   - time
   - datetime
