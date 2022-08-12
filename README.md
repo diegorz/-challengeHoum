@@ -3,8 +3,9 @@
 
 #### Este repositorio contiene los archivos utilizados para ejecutar el script en Python, el cual responde a las preguntas presentadas en el desafío.
 
+
 ### Datasets:
-####properties.csv:
+#### properties.csv:
 Contiene información básica de las características de la propiedad y su información geográfica. Las columnas de este archivo son las siguientes: property_id, business_type, type, bedrooms, bathrooms, latitude, longitude, locality, city & country.
 
 #### users.csv:
@@ -14,7 +15,8 @@ Contiene la información de los propietarios y su relación con la propiedad. La
 Contiene la información de los clientes que se han registrado en alguna visita a una propiedad. Las columnas de este archivo son las siguientes: schedule_id, property_id, begin_date, end_date, type_visit & status. Este último campo, puede tomar valor según el estado de la visita y permite verificar si las visitas están agendadas y aún no se realizan (scheduled), canceladas (cancelled) o ya realizadas (Done)
 
 #### Weather API de Visual Crossing (https://www.visualcrossing.com/weather-api):
-API a la cual se le puede consultar el clima de un lugar en un rango de fechas. Esta API retorna como respuesta datos de temperatura, humedad, condiciones, entre otros.
+Simple API a la cual se le puede consultar la historia y el pronóstico del clima de un lugar en un rango de fechas. Esta API retorna como respuesta datos de temperatura, sensación términca, humedad, precipitaciones, condiciones climáticas, entre otros.
+
 
 ### Código:
 #### config.json:
