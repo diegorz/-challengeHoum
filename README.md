@@ -1,7 +1,7 @@
 # Houm Challenge
 ## Houm es una startup que permite administrar, arrendar y vender propiedades rápido, seguro y fácil a miles de usuarios en Latinoamérica.
 
-#### Este repositorio contiene los archivos utilizados para ejecutar el script en Python, el cual responde a las preguntadas presentadas en el desafío.
+#### Este repositorio contiene los archivos utilizados para ejecutar el script en Python, el cual responde a las preguntas presentadas en el desafío.
 
 ### Datasets:
 - *properties.csv*: 
