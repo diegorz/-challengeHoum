@@ -14,6 +14,7 @@ from datetime import timedelta
 import requests
 import pandas as pd
 import sys
+from io import StringIO 
 
 time_init = time.time()
 print('\n[INFO] Comienzo de ejecución\n')
@@ -30,7 +31,11 @@ base_url="https://weather.visualcrossing.com/VisualCrossingWebServices/rest/serv
 # UnitGroup 
 unit_group='metric'
 # Include sections
-include_time="days"
+include_time='days'
+# Optional columns for reduce query cost
+elements=''
+# Optional type of API response
+file_type='csv'
 # Optional start and end dates
 start_date = ''
 end_date = ''
@@ -40,7 +45,7 @@ end_date = ''
 ##########################################
 ########### API Query function ###########
 ##########################################
-def api_query_results(ApiQuery, ApiKey, UnitGroup, Include, StartDate, EndDate):
+def api_query_results(ApiQuery, ApiKey, UnitGroup, Include, Elements, ContentType, StartDate, EndDate):
     """
     Query to API and return a json with response
     
@@ -49,6 +54,8 @@ def api_query_results(ApiQuery, ApiKey, UnitGroup, Include, StartDate, EndDate):
     ApiKey: User API Key.
     UnitGroup: Units of the output - us or metric.
     Include: Include days,hours,current,alerts values.
+    Elements: Columns that must extract.
+    ContentType: type (JSON or CSV) of API response.
     StartDate: If nothing is specified, the forecast is retrieved. If start date only is specified, a single historical or forecast day will be retrieved.
     EndDate: If nothing is specified, the forecast is retrieved. If both start and and end date are specified, a date range will be retrieved.
     """
@@ -67,10 +74,15 @@ def api_query_results(ApiQuery, ApiKey, UnitGroup, Include, StartDate, EndDate):
     if (len(Include)):
         ApiQuery+="&include="+Include
     
+    if (len(Elements)):
+        ApiQuery+="&elements="+Elements
+    
+    if (len(ContentType)):
+        ApiQuery+="&contentType="+ContentType
+
     try: 
         response = requests.get(ApiQuery)
-        body = response.json()
-        return body
+        return response.content
     except Exception as e:
         print('[Error]', e)
         sys.exit()
@@ -140,11 +152,13 @@ for lat, lon, start_date, end_date in lat_lon_props_id:
         api_query_latlon=base_url
         # Append the latitude and longitude
         api_query_latlon+=str(lat)+","+str(lon)
-        body_rain = api_query_results(ApiQuery=api_query_latlon, ApiKey=api_key, UnitGroup=unit_group, Include=include_time
-                                    ,StartDate=start_date, EndDate=end_date)
-        
-        # Se transforma el objeto json retornado a dataframe de pandas
-        df_id2 = pd.DataFrame.from_dict(body_rain['days'])
+        # Set columns necessary
+        columns_select='datetime,temp'
+        body_id = api_query_results(ApiQuery=api_query_latlon, ApiKey=api_key, UnitGroup=unit_group, Include=include_time
+                                    ,Elements=columns_select, ContentType=file_type, StartDate=start_date, EndDate=end_date)
+    
+        # Se transforma el objeto csv retornado a dataframe de pandas
+        df_id2 = pd.read_csv(StringIO(body_id.decode('utf-8')))
         # Se concatena cada dataframe generado por cada consulta a la API a un dataframe que consolida todos los resultados
         df_id2_total = pd.concat([df_id2_total,df_id2], ignore_index=True)
         
@@ -181,11 +195,13 @@ for lat, lon, start_date, end_date in latlon_visits_rain:
         api_query_latlon=base_url
         # Append the latitude and longitude
         api_query_latlon+=str(lat)+","+str(lon)
+        # Set columns necessary
+        columns_select='datetime,temp,preciptype'
         body_rain = api_query_results(ApiQuery=api_query_latlon, ApiKey=api_key, UnitGroup=unit_group, Include=include_time
-                                    ,StartDate=start_date, EndDate=end_date)
+                                    ,Elements=columns_select,ContentType=file_type, StartDate=start_date, EndDate=end_date)
 
-        # Se transforma el objeto json retornado a dataframe de pandas
-        df_rain = pd.DataFrame.from_dict(body_rain['days'])
+        # Se transforma el objeto csv retornado a dataframe de pandas
+        df_rain = pd.read_csv(StringIO(body_rain.decode('utf-8')))
         # Si aquel día tiene tipo de precipitación = 'rain' entonces se concatena al dataframe que consolida todos los resultados
         if 'rain' in df_rain['preciptype'][0]: 
             df_rain_total = pd.concat([df_rain_total,df_rain], ignore_index=True)
@@ -222,10 +238,13 @@ for lat, lon, start_date, end_date in latlon_props_suba:
         api_query_latlon=base_url
         # Append the latitude and longitude
         api_query_latlon+=str(lat)+","+str(lon)
-        body_suba = api_query_results(ApiQuery=api_query_latlon, ApiKey=api_key, UnitGroup=unit_group, Include=include_time, StartDate=start_date, EndDate=end_date)
+        # Set columns necessary
+        columns_select='datetime,temp'
+        body_suba = api_query_results(ApiQuery=api_query_latlon, ApiKey=api_key, UnitGroup=unit_group, Include=include_time
+                                    ,Elements=columns_select,ContentType=file_type, StartDate=start_date, EndDate=end_date)
         
         # Se transforma la respuesta del json a dataframe de pandas
-        df_suba = pd.DataFrame.from_dict(body_suba['days'])
+        df_suba = pd.read_csv(StringIO(body_suba.decode('utf-8')))
         # Se concatena cada dataframe generado de cada consulta a la API a un dataframe que consolida los resultados
         df_suba_total = pd.concat([df_suba_total,df_suba], ignore_index=True)
     except Exception as e:
